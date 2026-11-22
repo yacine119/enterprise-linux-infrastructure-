@@ -47,4 +47,4 @@ I recognize that this assessment is still at a foundational level, and there is 
 
 This is the beginning of my journey into Governance, Risk, and Compliance. My next objective is to develop a more comprehensive enterprise-oriented risk assessment and security audit project, incorporating structured risk analysis, control evaluation, framework mapping, evidence collection, and risk treatment strategies.
 
-It's going to be a big project that I will mix everything I've learned that I promised to the future readers of this README
+It's going to be a big project that I will mix everything I've learned this is a promise to the future readers of this README
