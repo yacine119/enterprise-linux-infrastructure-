@@ -1,0 +1,305 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 15/09/2026
+Asset: ROCKY-WEB01
+Threat:
+Exploitation of known software vulnerabilities
+Vulnerability:
+Unpatched or outdated software packages
+Risk:
+Compromise of the web server through exploitation of known
+software vulnerabilities
+Impact:
+Unauthorized access, service disruption, data compromise
+Control:
+Regular patch management and security updates
+Evidence:
+- Package update results
+- Package manager output
+- Date of last update
+- Reboot requirement check
+Control status:
+Implemented
+Control test:
+System checked after updates and confirmed fully updated
+Residual risk:
+Some residual risk remains because newly disclosed vulnerabilities
+may exist before patches become available or are applied
+Risk treatment:
+Mitigate
+Report:
+System fully updated; no reboot required.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 16/09/2026
+Asset:ROCKY-WEB01 / ssh
+Threat:
+Unauthorized remote access
+Vulnerabilities:
+- Insecure SSH configuration
+- Excessive SSH access
+- Weak authentication controls
+- Unnecessary network exposure
+Risk:
+Unauthorized access and potential compromise of ROCKY-WEB01
+
+Impact:
+- Unauthorized system access
+- Data modification
+- Service disruption
+- Loss of confidentiality/integrity 
+Controls:
+- SSH key authentication
+- PermitRootLogin no
+- AllowUsers webadmin
+- Least privilege
+- Firewall restriction
+- Centralized SSH logging
+Evidence:
+- sshd_config
+- firewall configuration
+- SSH logs
+- Successful/failed authentication tests
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 17/09/2026
+Asset:ROCKY-WEB01 / Web content
+Threat:
+Unauthorized modification of web files
+Vulnerability:
+Excessive write permissions on web content
+Risk:
+Unauthorized modification of website files resulting in
+website defacement
+Impact:
+- Loss of integrity
+- Reputation damage
+- Service disruption
+Controls:
+- Least privilege
+- File ownership
+- File permissions
+- User/group separation
+- Monitoring
+Evidence:
+- ls -ld output
+- Permission configuration
+- Nginx access logs
+- Nginx error logs
+- Local HTTP test
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 18/09/2026
+Asset:ROCKY-WEB01 / Web content
+Threat:
+Unauthorized access to sensitive files
+Vulnerability:
+Excessive filesystem permissions
+Risk:
+Unauthorized users could access or modify protected data
+Impact:
+Confidentiality/integrity compromise
+Controls:
+- Groups
+- Ownership
+- chmod
+- Separate filesystem
+- Least privilege
+Evidence:
+- id testuser
+- ls -ld /srv/data/public /srv/data/private
+- stat output
+- Permission-denied test
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 19/09/2026
+Asset:ROCKY-WEB01 
+Threat:
+Unauthorized network access
+ 
+Vulnerability:
+Unnecessary or unrestricted network services exposed
+ Risk:
+Unauthorized access to network services on ROCKY-WEB01
+impact:
+Unauthorized access, service exploitation, data compromise
+ Control:
+Host-based firewall restricting inbound traffic
+ Evidence:
+- firewall-cmd --list-all
+- ss -tulpn
+- Connectivity tests
+ Control status:
+Implemented and tested
+ Residual risk:
+Residual risk remains because permitted services
+(SSH/HTTP) are still reachable and may contain vulnerabilities
+ Risk treatment:
+Mitigate
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 20/09/2026
+Asset:
+DEBIAN-LOG01 / Centralized security logs
+Threat:
+Unauthorized activity or compromise of ROCKY-WEB01
+Vulnerability:
+Security events may be difficult to detect or investigate
+if logs remain only on the affected server
+Risk:
+Loss of security visibility and investigation capability
+Impact:
+- Delayed detection
+- Incomplete incident investigation
+- Loss of forensic evidence
+Control:
+Centralized security logging using rsyslog
+Evidence:
+- Rocky rsyslog configuration
+- Debian rsyslog configuration
+- UDP 514 listener
+- Central log received on Debian
+- SSH authentication event visible on Debian
+Control status:
+Implemented and tested
+Residual risk:
+Residual risk remains because centralized logging does not
+prevent an attack; it improves detection and investigation.
+Risk treatment:
+Mitigate
+Report:
+Centralized logging successfully received security events
+from ROCKY-WEB01.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Date: 21/09/2026
+Asset:
+ROCKY-WEB01 / Website and application data
+Threat:
+Hardware failure, accidental deletion, corruption,
+or other data-loss event
+Vulnerability:
+Critical data depends on the availability of the primary server
+without an independent recovery mechanism
+Risk:
+Loss of important website/application data
+Impact:
+- Data loss
+- Service disruption
+- Recovery delays
+Control:
+Automated backup of ROCKY-WEB01 data to DEBIAN-LOG01
+using rsync over SSH with key-based authentication
+Evidence:
+- Backup script
+- SSH key configuration
+- rsync output
+- /srv/backup/rocky-web01/
+- systemd service
+- systemd timer
+- Restore test
+Control status:
+Implemented and tested
+Residual risk:
+Residual risk remains because backups can fail, become corrupted,
+or become unavailable if the backup server is compromised.
+Risk treatment:
+Mitigate
+Report:
+Automated backup and restoration mechanism implemented and tested.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 21/09/2026
+ Asset:ROCKY-WEB01 / Nginx web service
+Threat:
+Service failure or disruption
+ Vulnerability:
+Dependence on a single Nginx service instance
+ Risk:
+Website unavailability due to Nginx or server failure
+ Impact:
+Loss of website availability and interruption of service
+ Controls:
+- systemd service management
+- Nginx configuration validation
+- Firewall configuration
+- Backup and recovery
+- Service monitoring
+ Evidence:
+- systemctl status nginx
+- nginx -t
+- curl http://localhost
+- ss -tulpn
+- Nginx logs
+Control status:
+Implemented and tested
+ Residual risk:
+Residual risk remains because the lab uses a single web server
+without high availability.
+ Risk treatment:
+Mitigate
+Report:
+Nginx service operational and configuration validated.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 21/09/2026
+Asset: Security logs
+ Threat:
+Attacker attempts to remove or manipulate evidence
+Vulnerability:
+Logs stored on the affected server could potentially be altered
+or deleted after compromise
+Risk:
+Loss or manipulation of security evidence
+Impact:
+Reduced ability to detect, investigate and reconstruct incidents
+ Control:
+Centralized logging to DEBIAN-LOG01
+ Evidence:
+- rsyslog configuration
+- Debian remote log files
+- Rocky generated test event
+- Corresponding event received on Debia
+Residual risk:
+Residual risk remains because the lab does not implement
+full SIEM/WORM/immutable log storage.
+Risk treatment:
+Mitigate
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Date: 21/09/2026
+Asset:Backup System — DEBIAN-LOG01
+Threat:
+Attackers gain administrative control and delete, encrypt, or alter backup data.
+Vulnerability:
+Access to stored credentials / insufficient protection of backup credentials and recovery data.
+Risk:
+Compromise or loss of backup data, preventing recovery after a security or operational incident.
+Impact:
+Total or significant data loss, extended business downtime, and inability to recover critical services/data.
+Control:
+Centralized backup to DEBIAN-LOG01 using rsync over SSH with key-based authentication, dedicated backup account, and separate backup storage.
+Evidence:
+- Backup directory on DEBIAN-LOG01
+- SSH key-based authentication configuration
+- rocky-backup.service configuration
+- rocky-backup.timer configuration
+- Successful backup execution
+- Backup files verified on DEBIAN-LOG01
+- Restore test confirming data can be recovered
+Residual risk:
+Risk is reduced but not eliminated. If DEBIAN-LOG01 or the backup credentials are compromised, an attacker could potentially modify or destroy backup data. Additional protection such as restricted backup permissions, credential protection, offline/immutable copies, and periodic restore testing may be required.
+Risk treatment:
+Mitigate
+
+
+
+
+ID	Asset	Risk
+R-01	ROCKY-WEB01	Unauthorized remote access
+R-02	Web content	Unauthorized website modification
+R-03	/srv/data	Unauthorized data access
+R-04	ROCKY-WEB01	Unauthorized network access
+R-05	Software/packages	Exploitation of unpatched vulnerabilities
+R-06	Security logs	Loss/manipulation of security evidence
+R-07	Security monitoring	Loss of security visibility
+R-08	Website/service	Nginx/service unavailability
+R-09	Website/application data	Data loss
+R-10	Backup system	Backup/recovery failure
+
+
+
+
+
